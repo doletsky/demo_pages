@@ -736,7 +736,7 @@ footer {
     <li><a href="#projects">Проекты</a></li>
     <li><a href="#contact">Контакт</a></li>
   </ul>
-  <a href="mailto:doletsky.a@gmail.com" class="nav-cta">Написать</a>
+  <a href="#contact" class="nav-cta">Написать</a>
 </nav>
 
 <!-- HERO -->
@@ -750,8 +750,9 @@ footer {
     </h1>
     <div class="hero-row">
       <p class="hero-desc">
-        <strong>Senior Backend Developer</strong> с 15 годами инженерной практики.
-        Проектирую распределённые финансовые системы — виртуальные карты, криптопроцессинг, внутренние балансы.
+        <strong>Senior Backend Developer</strong> с 15 годами инженерной практики. Создаю решения любой сложности — от простых сайтов (лендинги, визитки, портфолио) 
+        и сервисов (системы бронирования, интернет-магазины, миниCRM, боты, парсеры, AI агенты) до распределенных микросервисных систем.
+        Проектирую, разрабатываю, вывожу в продакшн и поддерживаю распределённые финансовые системы.
         Там, где цена ошибки — деньги клиента, я выбираю <strong>надежность и безопасность.</strong>
       </p>
       <div class="hero-meta">
@@ -1164,23 +1165,20 @@ footer {
                 <input type="text" id="fn" name="name" placeholder="Иван Петров">
               </div>
               <div class="field">
-                <label>Email / Telegram</label>
-                <input type="text" id="fc" name="contact" placeholder="@username">
+                <label>Email</label>
+                <input type="email" id="fc" name="email" placeholder="your@email.com" required>
               </div>
-            </div>
-            <div class="field">
-              <label>Email (для подтверждения)</label>
-              <input type="email" id="femail" name="email" placeholder="your@email.com">
             </div>
             <div class="field">
               <label>Тема</label>
               <select id="ft" name="topic">
                 <option value="">Выберите тему...</option>
+                <option>Вэб разработка (лендинг, визитки, портфолио)</option>
+                <option>Вэб разработка (сайты бронирования, интернет-магазины, миниCRM)</option>
+                <option>Вэб разработка (сайты - доработка/ отладка)</option>
+                <option>Backend разработка (Python - боты, парсеры, AI агенты)</option>
                 <option>FinTech / Платёжная система</option>
-                <option>Криптопроцессинг</option>
                 <option>API интеграция</option>
-                <option>Архитектурный консалтинг</option>
-                <option>Backend разработка (Python / Laravel)</option>
                 <option>Другое</option>
               </select>
             </div>
@@ -1200,7 +1198,7 @@ footer {
         <div class="form-success-msg" id="fsuccess">
           <div class="success-line"></div>
           <h4>Сообщение отправлено</h4>
-          <p>Спасибо. Отвечу в течение рабочего дня.<br>Также можно написать напрямую в Telegram: <strong style="color:var(--amber-soft)">@adoletsky</strong></p>
+          <p>Спасибо. Отвечу в течение двух рабочих дней.<br>Также можно написать напрямую в Telegram: <strong style="color:var(--amber-soft)">@adoletsky</strong></p>
         </div>
       </div>
     </div>
@@ -1251,15 +1249,18 @@ document.querySelectorAll('.r, .timeline-entry').forEach(el => obs.observe(el));
 document.getElementById('contactForm').addEventListener('submit', async (e) => {
   e.preventDefault();
   const nameEl = document.getElementById('fn');
-  const contactEl = document.getElementById('fc');
+  const emailEl = document.getElementById('fc');
   const msgEl = document.getElementById('fm');
   const topicEl = document.getElementById('ft');
   const name = nameEl.value.trim();
-  const contact = contactEl.value.trim();
+  const email = emailEl.value.trim();
   const msg = msgEl.value.trim();
-  if (!name || !contact || !msg) {
-    [nameEl, contactEl, msgEl].forEach(el => {
-      if (!el.value.trim()) {
+
+  // Simple email validation
+  const emailRe = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+  if (!name || !email || !msg || !emailRe.test(email)) {
+    [nameEl, emailEl, msgEl].forEach(el => {
+      if (!el.value.trim() || (el === emailEl && !emailRe.test(el.value.trim()))) {
         el.style.borderColor = '#7a3535';
         setTimeout(() => el.style.borderColor = '', 2000);
       }
@@ -1268,15 +1269,9 @@ document.getElementById('contactForm').addEventListener('submit', async (e) => {
   }
 
   const formData = new FormData(e.target);
-  // Add a small helper field combining contact info if desired
-  formData.set('contact', contact);
-  // If user provided an email, set it as reply-to so formsubmit sends autoresponse
-  const emailEl = document.getElementById('femail');
-  const email = emailEl && emailEl.value.trim();
-  if (email) {
-    formData.set('_replyto', email);
-    formData.set('email', email);
-  }
+  // Ensure email field is present and used as reply-to for autoresponse
+  formData.set('_replyto', email);
+  formData.set('email', email);
 
   try {
     const res = await fetch('https://formsubmit.co/ajax/doletsky.a@gmail.com', {
