@@ -1,0 +1,277 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Заказать торт - Sweet Dreams</title>
+    <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@400;700&family=Montserrat:wght@300;400;500;600&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <style>
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        :root { --primary: #d4a5a5; --secondary: #f9f1f0; --accent: #9b8b8b; --dark: #2c2c2c; --light: #ffffff; }
+        body { font-family: 'Montserrat', sans-serif; color: var(--dark); line-height: 1.6; }
+        h1, h2, h3, h4 { font-family: 'Playfair Display', serif; font-weight: 700; }
+        
+        nav { position: fixed; top: 0; width: 100%; background: rgba(255, 255, 255, 0.95); backdrop-filter: blur(10px); z-index: 1000; box-shadow: 0 2px 20px rgba(0,0,0,0.05); }
+        .nav-container { max-width: 1200px; margin: 0 auto; padding: 1rem 2rem; display: flex; justify-content: space-between; align-items: center; }
+        .logo { font-family: 'Playfair Display', serif; font-size: 1.8rem; color: var(--primary); text-decoration: none; font-weight: 700; letter-spacing: 2px; }
+        .nav-links { display: flex; list-style: none; gap: 2.5rem; }
+        .nav-links a { text-decoration: none; color: var(--dark); font-weight: 500; font-size: 0.9rem; text-transform: uppercase; letter-spacing: 1px; }
+        .nav-links a:hover { color: var(--primary); }
+        
+        .page-header { height: 50vh; background: linear-gradient(rgba(0,0,0,0.4), rgba(0,0,0,0.4)), url('https://images.unsplash.com/photo-1578985545062-69928b1d9587?ixlib=rb-4.0.3&auto=format&fit=crop&w=1920&q=80'); background-size: cover; background-position: center; display: flex; align-items: center; justify-content: center; text-align: center; color: var(--light); margin-top: 70px; }
+        .page-header h1 { font-size: 3.5rem; margin-bottom: 1rem; }
+        
+        section { padding: 6rem 2rem; }
+        .container { max-width: 900px; margin: 0 auto; }
+        
+        .order-form-container { background: var(--secondary); padding: 3rem; border-radius: 20px; box-shadow: 0 10px 40px rgba(0,0,0,0.1); }
+        .order-form-container h2 { text-align: center; font-size: 2.5rem; margin-bottom: 1rem; color: var(--dark); }
+        .order-form-container > p { text-align: center; color: var(--accent); margin-bottom: 3rem; }
+        
+        .form-section { margin-bottom: 2.5rem; }
+        .form-section h3 { font-size: 1.5rem; margin-bottom: 1.5rem; color: var(--dark); padding-bottom: 0.5rem; border-bottom: 2px solid var(--primary); display: inline-block; }
+        
+        .form-row { display: grid; grid-template-columns: 1fr 1fr; gap: 1.5rem; }
+        .form-group { margin-bottom: 1.5rem; }
+        .form-group label { display: block; margin-bottom: 0.5rem; color: var(--dark); font-weight: 500; }
+        .form-group input, .form-group textarea, .form-group select { width: 100%; padding: 1rem; border: 2px solid #e0e0e0; border-radius: 10px; font-family: inherit; transition: border-color 0.3s; background: white; }
+        .form-group input:focus, .form-group textarea:focus, .form-group select:focus { outline: none; border-color: var(--primary); }
+        .form-group textarea { resize: vertical; min-height: 100px; }
+        
+        .checkbox-group { display: flex; flex-wrap: wrap; gap: 1rem; margin-top: 0.5rem; }
+        .checkbox-item { display: flex; align-items: center; gap: 0.5rem; }
+        .checkbox-item input[type="checkbox"] { width: 20px; height: 20px; accent-color: var(--primary); }
+        
+        .price-calculation { background: white; padding: 2rem; border-radius: 15px; margin-top: 2rem; text-align: center; }
+        .price-calculation h4 { font-size: 1.3rem; margin-bottom: 1rem; color: var(--dark); }
+        .estimated-price { font-size: 2.5rem; color: var(--primary); font-weight: 700; margin: 1rem 0; }
+        .price-note { color: var(--accent); font-size: 0.9rem; }
+        
+        .btn { display: inline-block; padding: 1.2rem 3rem; background: var(--primary); color: var(--light); text-decoration: none; border-radius: 50px; font-weight: 600; border: none; cursor: pointer; transition: all 0.3s; font-size: 1.1rem; width: 100%; }
+        .btn:hover { transform: translateY(-3px); box-shadow: 0 10px 30px rgba(212, 165, 165, 0.4); }
+        
+        .success-message { display: none; background: #d4edda; color: #155724; padding: 2rem; border-radius: 15px; text-align: center; margin-top: 2rem; }
+        .success-message i { font-size: 4rem; margin-bottom: 1rem; color: #28a745; }
+        
+        footer { background: var(--dark); color: var(--light); padding: 4rem 2rem 2rem; }
+        .footer-content { max-width: 1200px; margin: 0 auto; display: grid; grid-template-columns: repeat(auto-fit, minmax(250px, 1fr)); gap: 3rem; margin-bottom: 3rem; }
+        .footer-section h4 { margin-bottom: 1.5rem; color: var(--primary); }
+        .footer-section p, .footer-section a { color: #aaa; text-decoration: none; line-height: 2; }
+        .footer-bottom { text-align: center; padding-top: 2rem; border-top: 1px solid #444; color: #666; }
+        
+        @media (max-width: 768px) {
+            .nav-links { display: none; }
+            .form-row { grid-template-columns: 1fr; }
+            .page-header h1 { font-size: 2.5rem; }
+            .order-form-container { padding: 2rem 1.5rem; }
+        }
+    </style>
+</head>
+<body>
+    <nav>
+        <div class="nav-container">
+            <a href="index.html" class="logo">Sweet Dreams</a>
+            <ul class="nav-links">
+                <li><a href="index.html">Главная</a></li>
+                <li><a href="about.html">О нас</a></li>
+                <li><a href="services.html">Услуги</a></li>
+                <li><a href="portfolio.html">Портфолио</a></li>
+                <li><a href="contacts.html">Контакты</a></li>
+            </ul>
+        </div>
+    </nav>
+
+    <div class="page-header">
+        <div>
+            <h1>Оформить заказ</h1>
+            <p>Заполните форму, и мы свяжемся с вами</p>
+        </div>
+    </div>
+
+    <section>
+        <div class="container">
+            <div class="order-form-container">
+                <h2>Форма заказа</h2>
+                <p>Расскажите нам о вашем идеальном десерте</p>
+                
+                <form id="orderForm">
+                    <div class="form-section">
+                        <h3>Контактная информация</h3>
+                        <div class="form-row">
+                            <div class="form-group">
+                                <label>Ваше имя *</label>
+                                <input type="text" required placeholder="Иван Иванов">
+                            </div>
+                            <div class="form-group">
+                                <label>Телефон *</label>
+                                <input type="tel" required placeholder="+7 (___) ___-__-__">
+                            </div>
+                        </div>
+                        <div class="form-row">
+                            <div class="form-group">
+                                <label>Email</label>
+                                <input type="email" placeholder="example@mail.ru">
+                            </div>
+                            <div class="form-group">
+                                <label>Дата мероприятия *</label>
+                                <input type="date" required>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="form-section">
+                        <h3>Параметры торта</h3>
+                        <div class="form-row">
+                            <div class="form-group">
+                                <label>Тип изделия *</label>
+                                <select required onchange="calculatePrice()">
+                                    <option value="">Выберите тип</option>
+                                    <option value="wedding">Свадебный торт</option>
+                                    <option value="birthday">День рождения</option>
+                                    <option value="kids">Детский торт</option>
+                                    <option value="corporate">Корпоративный</option>
+                                    <option value="cupcakes">Капкейки</option>
+                                    <option value="other">Другое</option>
+                                </select>
+                            </div>
+                            <div class="form-group">
+                                <label>Вес (кг) *</label>
+                                <input type="number" min="1" step="0.5" required placeholder="3" onchange="calculatePrice()">
+                            </div>
+                        </div>
+                        
+                        <div class="form-group">
+                            <label>Начинка (можно выбрать несколько)</label>
+                            <div class="checkbox-group">
+                                <div class="checkbox-item">
+                                    <input type="checkbox" id="choco" onchange="calculatePrice()">
+                                    <label for="choco">Шоколадная</label>
+                                </div>
+                                <div class="checkbox-item">
+                                    <input type="checkbox" id="vanilla" onchange="calculatePrice()">
+                                    <label for="vanilla">Ванильная</label>
+                                </div>
+                                <div class="checkbox-item">
+                                    <input type="checkbox" id="fruit" onchange="calculatePrice()">
+                                    <label for="fruit">Фруктовая</label>
+                                </div>
+                                <div class="checkbox-item">
+                                    <input type="checkbox" id="berry" onchange="calculatePrice()">
+                                    <label for="berry">Ягодная</label>
+                                </div>
+                                <div class="checkbox-item">
+                                    <input type="checkbox" id="caramel" onchange="calculatePrice()">
+                                    <label for="caramel">Карамельная</label>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="form-group">
+                            <label>Дополнительный декор</label>
+                            <div class="checkbox-group">
+                                <div class="checkbox-item">
+                                    <input type="checkbox" id="flowers" onchange="calculatePrice()">
+                                    <label for="flowers">Сахарные цветы (+1500₽)</label>
+                                </div>
+                                <div class="checkbox-item">
+                                    <input type="checkbox" id="photo" onchange="calculatePrice()">
+                                    <label for="photo">Съедобное фото (+800₽)</label>
+                                </div>
+                                <div class="checkbox-item">
+                                    <input type="checkbox" id="figures" onchange="calculatePrice()">
+                                    <label for="figures">Фигурки (+2000₽)</label>
+                                </div>
+                                <div class="checkbox-item">
+                                    <input type="checkbox" id="gold" onchange="calculatePrice()">
+                                    <label for="gold">Золотой декор (+1000₽)</label>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="form-section">
+                        <h3>Детали заказа</h3>
+                        <div class="form-group">
+                            <label>Пожелания по дизайну</label>
+                            <textarea placeholder="Опишите желаемый дизайн, цветовую гамму, надписи на торте..."></textarea>
+                        </div>
+                        <div class="form-group">
+                            <label>Адрес доставки</label>
+                            <input type="text" placeholder="г. Москва, ул. Примерная, д. 1">
+                        </div>
+                        <div class="form-group">
+                            <label>Комментарий к заказу</label>
+                            <textarea placeholder="Любая дополнительная информация..."></textarea>
+                        </div>
+                    </div>
+
+                    <div class="price-calculation">
+                        <h4>Предварительная стоимость</h4>
+                        <div class="estimated-price" id="estimatedPrice">от 0 ₽</div>
+                        <p class="price-note">* Окончательная стоимость будет рассчитана после обсуждения деталей</p>
+                    </div>
+
+                    <button type="submit" class="btn" style="margin-top: 2rem;">Отправить заказ</button>
+                </form>
+
+                <div class="success-message" id="successMessage">
+                    <i class="fas fa-check-circle"></i>
+                    <h3>Заказ успешно отправлен!</h3>
+                    <p>Мы свяжемся с вами в ближайшее время для уточнения деталей.</p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <footer>
+        <div class="footer-content">
+            <div class="footer-section">
+                <h4>Sweet Dreams</h4>
+                <p>Кондитерская премиум класса.</p>
+            </div>
+            <div class="footer-section">
+                <h4>Контакты</h4>
+                <p><i class="fas fa-phone"></i> +7 (999) 123-45-67</p>
+                <p><i class="fas fa-envelope"></i> info@sweetdreams.ru</p>
+            </div>
+        </div>
+        <div class="footer-bottom">
+            <p>&copy; 2024 Sweet Dreams. Все права защищены.</p>
+        </div>
+    </footer>
+
+    <script>
+        function calculatePrice() {
+            const weight = parseFloat(document.querySelector('input[type="number"]').value) || 0;
+            const basePrice = 3500; // базовая цена за кг
+            
+            let total = weight * basePrice;
+            
+            // Дополнительные опции
+            if (document.getElementById('flowers').checked) total += 1500;
+            if (document.getElementById('photo').checked) total += 800;
+            if (document.getElementById('figures').checked) total += 2000;
+            if (document.getElementById('gold').checked) total += 1000;
+            
+            const priceElement = document.getElementById('estimatedPrice');
+            if (total > 0) {
+                priceElement.textContent = `от ${total.toLocaleString()} ₽`;
+            } else {
+                priceElement.textContent = 'от 0 ₽';
+            }
+        }
+
+        document.getElementById('orderForm').addEventListener('submit', function(e) {
+            e.preventDefault();
+            
+            // Показываем сообщение об успехе
+            document.getElementById('successMessage').style.display = 'block';
+            this.style.display = 'none';
+            
+            // Прокрутка к сообщению
+            document.getElementById('successMessage').scrollIntoView({ behavior: 'smooth' });
+        });
+    </script>
+</body>
+</html>

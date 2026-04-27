@@ -1,0 +1,210 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>О нас - Sweet Dreams</title>
+    <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@400;700&family=Montserrat:wght@300;400;500;600&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <style>
+        /* Вставьте сюда CSS из index.html (те же стили) */
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        :root { --primary: #d4a5a5; --secondary: #f9f1f0; --accent: #9b8b8b; --dark: #2c2c2c; --light: #ffffff; --gradient: linear-gradient(135deg, #f5e6e6 0%, #e8d5d5 100%); }
+        body { font-family: 'Montserrat', sans-serif; color: var(--dark); line-height: 1.6; }
+        h1, h2, h3, h4 { font-family: 'Playfair Display', serif; font-weight: 700; }
+        
+        nav { position: fixed; top: 0; width: 100%; background: rgba(255, 255, 255, 0.95); backdrop-filter: blur(10px); z-index: 1000; box-shadow: 0 2px 20px rgba(0,0,0,0.05); }
+        .nav-container { max-width: 1200px; margin: 0 auto; padding: 1rem 2rem; display: flex; justify-content: space-between; align-items: center; }
+        .logo { font-family: 'Playfair Display', serif; font-size: 1.8rem; color: var(--primary); text-decoration: none; font-weight: 700; letter-spacing: 2px; }
+        .nav-links { display: flex; list-style: none; gap: 2.5rem; }
+        .nav-links a { text-decoration: none; color: var(--dark); font-weight: 500; font-size: 0.9rem; text-transform: uppercase; letter-spacing: 1px; position: relative; transition: color 0.3s; }
+        .nav-links a::after { content: ''; position: absolute; bottom: -5px; left: 0; width: 0; height: 2px; background: var(--primary); transition: width 0.3s; }
+        .nav-links a:hover::after { width: 100%; }
+        .nav-links a:hover { color: var(--primary); }
+        
+        .page-header { height: 50vh; background: linear-gradient(rgba(0,0,0,0.4), rgba(0,0,0,0.4)), url('https://images.unsplash.com/photo-1556217477-d325251ece38?ixlib=rb-4.0.3&auto=format&fit=crop&w=1920&q=80'); background-size: cover; background-position: center; display: flex; align-items: center; justify-content: center; text-align: center; color: var(--light); margin-top: 70px; }
+        .page-header h1 { font-size: 3.5rem; margin-bottom: 1rem; }
+        
+        section { padding: 6rem 2rem; }
+        .container { max-width: 1200px; margin: 0 auto; }
+        
+        .about-story { display: grid; grid-template-columns: 1fr 1fr; gap: 4rem; align-items: center; margin-bottom: 6rem; }
+        .about-story.reverse { direction: rtl; }
+        .about-story.reverse > * { direction: ltr; }
+        .about-story img { width: 100%; border-radius: 20px; box-shadow: 0 20px 40px rgba(0,0,0,0.1); }
+        .about-story h3 { font-size: 2rem; margin-bottom: 1.5rem; color: var(--dark); }
+        .about-story p { color: var(--accent); margin-bottom: 1rem; line-height: 1.8; }
+        
+        .team-section { background: var(--secondary); }
+        .section-title { text-align: center; margin-bottom: 4rem; }
+        .section-title h2 { font-size: 2.5rem; color: var(--dark); margin-bottom: 1rem; position: relative; display: inline-block; }
+        .section-title h2::after { content: ''; position: absolute; bottom: -10px; left: 50%; transform: translateX(-50%); width: 60px; height: 3px; background: var(--primary); }
+        
+        .team-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(250px, 1fr)); gap: 3rem; }
+        .team-member { text-align: center; background: white; padding: 2rem; border-radius: 20px; box-shadow: 0 5px 20px rgba(0,0,0,0.05); transition: transform 0.3s; }
+        .team-member:hover { transform: translateY(-10px); }
+        .team-member img { width: 150px; height: 150px; border-radius: 50%; object-fit: cover; margin-bottom: 1.5rem; border: 5px solid var(--secondary); }
+        .team-member h4 { font-size: 1.3rem; margin-bottom: 0.5rem; color: var(--dark); }
+        .team-member p { color: var(--primary); font-weight: 500; margin-bottom: 1rem; }
+        .team-member .bio { color: var(--accent); font-size: 0.9rem; }
+        
+        .values-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(300px, 1fr)); gap: 2rem; margin-top: 3rem; }
+        .value-card { padding: 2rem; background: white; border-radius: 15px; border-left: 4px solid var(--primary); box-shadow: 0 5px 15px rgba(0,0,0,0.05); }
+        .value-card h4 { color: var(--dark); margin-bottom: 1rem; font-size: 1.3rem; }
+        .value-card p { color: var(--accent); }
+        
+        footer { background: var(--dark); color: var(--light); padding: 4rem 2rem 2rem; }
+        .footer-content { max-width: 1200px; margin: 0 auto; display: grid; grid-template-columns: repeat(auto-fit, minmax(250px, 1fr)); gap: 3rem; margin-bottom: 3rem; }
+        .footer-section h4 { margin-bottom: 1.5rem; color: var(--primary); }
+        .footer-section p, .footer-section a { color: #aaa; text-decoration: none; line-height: 2; }
+        .footer-bottom { text-align: center; padding-top: 2rem; border-top: 1px solid #444; color: #666; }
+        
+        @media (max-width: 768px) {
+            .nav-links { display: none; }
+            .about-story { grid-template-columns: 1fr; }
+            .page-header h1 { font-size: 2.5rem; }
+        }
+    </style>
+</head>
+<body>
+    <nav>
+        <div class="nav-container">
+            <a href="index.html" class="logo">Sweet Dreams</a>
+            <ul class="nav-links">
+                <li><a href="index.html">Главная</a></li>
+                <li><a href="about.html">О нас</a></li>
+                <li><a href="services.html">Услуги</a></li>
+                <li><a href="portfolio.html">Портфолио</a></li>
+                <li><a href="contacts.html">Контакты</a></li>
+                <li><a href="order.html" class="btn" style="padding: 0.5rem 1.5rem; background: var(--primary); color: white; border-radius: 50px; text-decoration: none;">Заказать</a></li>
+            </ul>
+        </div>
+    </nav>
+
+    <div class="page-header">
+        <div>
+            <h1>О нашей кондитерской</h1>
+            <p>История любви к сладкому</p>
+        </div>
+    </div>
+
+    <section>
+        <div class="container">
+            <div class="about-story">
+                <div>
+                    <h3>Наша история</h3>
+                    <p>Все началось в 2015 году, когда основательница кондитерской АннаSweet решила превратить свое хобби в дело жизни. Начав с небольших заказов для друзей и знакомых, она быстро завоевала репутацию мастера, способного создавать настоящие шедевры.</p>
+                    <p>Сегодня Sweet Dreams — это команда из 15 профессиональных кондитеров, работающих в современной студии, оборудованной по последнему слову техники. Мы продолжаем расти и развиваться, но главное остается неизменным — любовь к своему делу и стремление дарить людям радость через вкусные десерты.</p>
+                </div>
+                <div>
+                    <img src="https://images.unsplash.com/photo-1556910103-1c02745aae4d?ixlib=rb-4.0.3&auto=format&fit=crop&w=800&q=80" alt="Наша история">
+                </div>
+            </div>
+
+            <div class="about-story reverse">
+                <div>
+                    <img src="https://images.unsplash.com/photo-1578985545062-69928b1d9587?ixlib=rb-4.0.3&auto=format&fit=crop&w=800&q=80" alt="Наша философия">
+                </div>
+                <div>
+                    <h3>Наша философия</h3>
+                    <p>Мы верим, что каждый десерт должен быть не только вкусным, но и красивым. Поэтому мы уделяем внимание каждой детали — от выбора ингредиентов до финального декора.</p>
+                    <p>Используем только натуральные продукты: фермерские яйца, сливки высшего качества, бельгийский шоколад, свежие ягоды и фрукты. Никаких искусственных красителей и консервантов — только природа и мастерство.</p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <section class="team-section">
+        <div class="container">
+            <div class="section-title">
+                <h2>Наша команда</h2>
+                <p>Профессионалы, которые создают магию</p>
+            </div>
+            <div class="team-grid">
+                <div class="team-member">
+                    <img src="https://images.unsplash.com/photo-1583394293214-28ez8ac94e4a?ixlib=rb-4.0.3&auto=format&fit=crop&w=400&q=80" alt="Анна">
+                    <h4>Анна Свит</h4>
+                    <p>Основатель и шеф-кондитер</p>
+                    <p class="bio">10 лет опыта. Обучалась в Париже и Милане. Специализация — свадебные торты.</p>
+                </div>
+                <div class="team-member">
+                    <img src="https://images.unsplash.com/photo-1577219491135-ce391730fb2c?ixlib=rb-4.0.3&auto=format&fit=crop&w=400&q=80" alt="Мария">
+                    <h4>Мария Декор</h4>
+                    <p>Кондитер-декоратор</p>
+                    <p class="bio">Мастер сахарной флористики и росписи шоколадом. Призер международных конкурсов.</p>
+                </div>
+                <div class="team-member">
+                    <img src="https://images.unsplash.com/photo-1600891964092-4316c288032e?ixlib=rb-4.0.3&auto=format&fit=crop&w=400&q=80" alt="Елена">
+                    <h4>Елена Сладкая</h4>
+                    <p>Кондитер по десертам</p>
+                    <p class="bio">Специалист по французской выпечке и макарунам. Создает уникальные вкусовые сочетания.</p>
+                </div>
+                <div class="team-member">
+                    <img src="https://images.unsplash.com/photo-1595981267035-7b04ca84a82d?ixlib=rb-4.0.3&auto=format&fit=crop&w=400&q=80" alt="Дмитрий">
+                    <h4>Дмитрий Крем</h4>
+                    <p>Шоколатье</p>
+                    <p class="bio">Эксперт по работе с шоколадом. Создает сложные шоколадные конструкции и скульптуры.</p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <section>
+        <div class="container">
+            <div class="section-title">
+                <h2>Наши ценности</h2>
+                <p>То, что отличает нас от других</p>
+            </div>
+            <div class="values-grid">
+                <div class="value-card">
+                    <h4><i class="fas fa-heart" style="color: var(--primary); margin-right: 10px;"></i> Любовь к делу</h4>
+                    <p>Мы вкладываем душу в каждый торт. Для нас это не просто работа, а настоящее творчество.</p>
+                </div>
+                <div class="value-card">
+                    <h4><i class="fas fa-award" style="color: var(--primary); margin-right: 10px;"></i> Качество</h4>
+                    <p>Никаких компромиссов. Только лучшие ингредиенты и безупречное исполнение.</p>
+                </div>
+                <div class="value-card">
+                    <h4><i class="fas fa-users" style="color: var(--primary); margin-right: 10px;"></i> Индивидуальный подход</h4>
+                    <p>Каждый клиент уникален. Мы слушаем ваши пожелания и создаем именно то, что нужно вам.</p>
+                </div>
+                <div class="value-card">
+                    <h4><i class="fas fa-leaf" style="color: var(--primary); margin-right: 10px;"></i> Натуральность</h4>
+                    <p>Только натуральные ингредиенты без искусственных добавок и консервантов.</p>
+                </div>
+                <div class="value-card">
+                    <h4><i class="fas fa-clock" style="color: var(--primary); margin-right: 10px;"></i> Пунктуальность</h4>
+                    <p>Ценим ваше время. Всегда доставляем заказ точно в срок.</p>
+                </div>
+                <div class="value-card">
+                    <h4><i class="fas fa-palette" style="color: var(--primary); margin-right: 10px;"></i> Креативность</h4>
+                    <p>Постоянно развиваемся, изучаем новые техники и создаем уникальные дизайны.</p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <footer>
+        <div class="footer-content">
+            <div class="footer-section">
+                <h4>Sweet Dreams</h4>
+                <p>Кондитерская премиум класса. Создаем сладкие моменты счастья с 2015 года.</p>
+            </div>
+            <div class="footer-section">
+                <h4>Контакты</h4>
+                <p><i class="fas fa-map-marker-alt"></i> г. Москва, ул. Сладкая, 15</p>
+                <p><i class="fas fa-phone"></i> +7 (999) 123-45-67</p>
+                <p><i class="fas fa-envelope"></i> info@sweetdreams.ru</p>
+            </div>
+            <div class="footer-section">
+                <h4>Режим работы</h4>
+                <p>Пн-Пт: 9:00 - 20:00</p>
+                <p>Сб-Вс: 10:00 - 18:00</p>
+            </div>
+        </div>
+        <div class="footer-bottom">
+            <p>&copy; 2024 Sweet Dreams. Все права защищены.</p>
+        </div>
+    </footer>
+</body>
+</html>

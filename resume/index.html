@@ -1,0 +1,1299 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Александр Долецкий — Backend Developer · FinTech</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;0,600;0,700;1,300;1,400&family=Outfit:wght@300;400;500;600&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
+<style>
+:root {
+  --night: #0d0e11;
+  --deep: #14161b;
+  --surface: #1c1f27;
+  --border: #2a2d38;
+  --muted: #52566a;
+  --mid: #8a8fa8;
+  --light: #c8ccd9;
+  --bright: #eef0f6;
+  --white: #ffffff;
+  --amber: #c8933c;
+  --amber-soft: #e5b366;
+  --amber-dim: rgba(200,147,60,0.12);
+  --teal: #2d7d74;
+  --teal-soft: #3d9e94;
+  --red-dim: #7a3535;
+}
+
+*, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+html { scroll-behavior: smooth; font-size: 16px; }
+
+body {
+  font-family: 'Outfit', sans-serif;
+  background: var(--night);
+  color: var(--light);
+  overflow-x: hidden;
+  cursor: default;
+}
+
+/* ── SCROLLBAR ── */
+::-webkit-scrollbar { width: 4px; }
+::-webkit-scrollbar-track { background: var(--deep); }
+::-webkit-scrollbar-thumb { background: var(--amber); border-radius: 2px; }
+
+/* ── PROGRESS ── */
+#prog {
+  position: fixed; top: 0; left: 0; height: 2px;
+  background: linear-gradient(90deg, var(--amber), var(--amber-soft));
+  width: 0%; z-index: 9999;
+  transition: width 0.08s linear;
+}
+
+/* ── NAV ── */
+nav {
+  position: fixed; inset: 0 0 auto 0;
+  z-index: 500;
+  padding: 28px 64px;
+  display: flex; align-items: center; justify-content: space-between;
+  transition: all 0.4s ease;
+}
+nav.solid {
+  padding: 18px 64px;
+  background: rgba(13,14,17,0.94);
+  backdrop-filter: blur(20px);
+  border-bottom: 1px solid var(--border);
+}
+.nav-id {
+  font-family: 'Cormorant Garamond', serif;
+  font-size: 1.1rem; font-weight: 600;
+  color: var(--bright); letter-spacing: 0.04em;
+}
+.nav-id em { color: var(--amber); font-style: normal; }
+.nav-menu { display: flex; gap: 36px; list-style: none; }
+.nav-menu a {
+  font-size: 0.78rem; font-weight: 500;
+  letter-spacing: 0.14em; text-transform: uppercase;
+  color: var(--mid); text-decoration: none;
+  transition: color 0.3s;
+}
+.nav-menu a:hover { color: var(--amber); }
+.nav-cta {
+  font-size: 0.78rem; font-weight: 600;
+  letter-spacing: 0.1em; text-transform: uppercase;
+  color: var(--amber);
+  text-decoration: none;
+  border: 1px solid rgba(200,147,60,0.4);
+  padding: 9px 22px; border-radius: 2px;
+  transition: all 0.3s;
+}
+.nav-cta:hover {
+  background: var(--amber);
+  color: var(--night);
+}
+
+/* ── HERO ── */
+.hero {
+  position: relative;
+  height: 100vh; min-height: 700px;
+  display: flex; flex-direction: column; justify-content: flex-end;
+  overflow: hidden;
+}
+.hero-bg {
+  position: absolute; inset: 0;
+  background-image:
+    linear-gradient(to bottom, rgba(13,14,17,0.2) 0%, rgba(13,14,17,0.55) 50%, rgba(13,14,17,0.95) 100%),
+    url('https://images.unsplash.com/photo-1761098565340-b82d0d1be28d?q=80&w=735&auto=format&fit=crop&ixlib=rb-4.1.0&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D');
+  background-size: cover; background-position: center 30%;
+  transform: scale(1.04);
+  transition: transform 8s ease;
+}
+.hero-bg.loaded { transform: scale(1); }
+.hero-content {
+  position: relative; z-index: 2;
+  padding: 0 64px 80px;
+  max-width: 1300px;
+}
+.hero-eyebrow {
+  font-family: 'JetBrains Mono', monospace;
+  font-size: 0.72rem; letter-spacing: 0.2em;
+  text-transform: uppercase;
+  color: var(--amber);
+  margin-bottom: 24px;
+  opacity: 0; animation: rise 0.9s 0.2s ease forwards;
+}
+.hero-eyebrow span {
+  display: inline-block;
+  width: 32px; height: 1px;
+  background: var(--amber);
+  vertical-align: middle;
+  margin-right: 14px;
+}
+.hero-name {
+  font-family: 'Cormorant Garamond', serif;
+  font-size: clamp(3.5rem, 7vw, 7rem);
+  font-weight: 300; line-height: 0.95;
+  color: var(--white);
+  letter-spacing: -0.02em;
+  margin-bottom: 32px;
+  opacity: 0; animation: rise 0.9s 0.35s ease forwards;
+}
+.hero-name strong {
+  font-weight: 700;
+  display: block;
+}
+.hero-row {
+  display: flex; align-items: flex-end;
+  justify-content: space-between; gap: 48px;
+  opacity: 0; animation: rise 0.9s 0.5s ease forwards;
+}
+.hero-desc {
+  max-width: 560px;
+  font-size: 1.05rem; line-height: 1.8; font-weight: 300;
+  color: var(--mid);
+}
+.hero-desc strong { color: var(--bright); font-weight: 500; }
+.hero-meta {
+  display: flex; flex-direction: column; gap: 10px;
+  text-align: right; flex-shrink: 0;
+}
+.hero-meta-item {
+  font-family: 'JetBrains Mono', monospace;
+  font-size: 0.72rem; color: var(--mid);
+  letter-spacing: 0.08em;
+}
+.hero-meta-item strong { color: var(--amber-soft); }
+.hero-scroll-hint {
+  position: absolute; bottom: 32px; left: 50%;
+  transform: translateX(-50%);
+  display: flex; flex-direction: column; align-items: center; gap: 8px;
+  font-size: 0.68rem; letter-spacing: 0.16em; text-transform: uppercase;
+  color: var(--muted);
+  animation: bounce 2.5s 1.5s infinite;
+}
+.scroll-line {
+  width: 1px; height: 48px;
+  background: linear-gradient(to bottom, var(--amber), transparent);
+}
+@keyframes bounce {
+  0%, 100% { transform: translateX(-50%) translateY(0); }
+  50% { transform: translateX(-50%) translateY(8px); }
+}
+@keyframes rise {
+  from { opacity: 0; transform: translateY(30px); }
+  to { opacity: 1; transform: translateY(0); }
+}
+
+/* ── SECTIONS ── */
+section { padding: 120px 0; }
+.wrap { max-width: 1300px; margin: 0 auto; padding: 0 64px; }
+.section-tag {
+  font-family: 'JetBrains Mono', monospace;
+  font-size: 0.68rem; letter-spacing: 0.22em;
+  text-transform: uppercase; color: var(--amber);
+  display: flex; align-items: center; gap: 14px;
+  margin-bottom: 20px;
+}
+.section-tag::before {
+  content: '';
+  display: inline-block; width: 28px; height: 1px;
+  background: var(--amber);
+}
+.section-h {
+  font-family: 'Cormorant Garamond', serif;
+  font-size: clamp(2.4rem, 4vw, 3.6rem);
+  font-weight: 300; line-height: 1.1;
+  color: var(--bright);
+  letter-spacing: -0.01em;
+}
+.section-h em { font-style: italic; color: var(--amber-soft); font-weight: 300; }
+
+/* ── ABOUT / PHOTO SPLIT ── */
+#about {
+  background: var(--deep);
+}
+.about-grid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 80px; align-items: center;
+  margin-top: 72px;
+}
+.about-photo-wrap {
+  position: relative;
+}
+.about-photo {
+  width: 100%; aspect-ratio: 3/4;
+  object-fit: cover; object-position: top;
+  display: block;
+  filter: grayscale(20%) contrast(1.05);
+}
+.about-photo-frame {
+  position: absolute; inset: 0;
+  border: 1px solid rgba(200,147,60,0.2);
+  transform: translate(16px, 16px);
+  pointer-events: none;
+}
+.about-photo-label {
+  position: absolute; bottom: -20px; left: -20px;
+  background: var(--amber);
+  color: var(--night);
+  font-family: 'JetBrains Mono', monospace;
+  font-size: 0.68rem; font-weight: 500;
+  letter-spacing: 0.12em; text-transform: uppercase;
+  padding: 10px 18px;
+}
+.about-text {
+  display: flex; flex-direction: column; gap: 28px;
+}
+.about-lead {
+  font-family: 'Cormorant Garamond', serif;
+  font-size: 1.55rem; line-height: 1.55;
+  color: var(--bright); font-weight: 300;
+}
+.about-lead em { font-style: italic; color: var(--amber-soft); }
+.about-body {
+  font-size: 0.96rem; line-height: 1.85;
+  color: var(--mid); font-weight: 300;
+}
+.about-body strong { color: var(--light); font-weight: 500; }
+.about-pillars {
+  display: grid; grid-template-columns: 1fr 1fr; gap: 16px;
+  margin-top: 8px;
+}
+.pillar {
+  padding: 18px 20px;
+  border: 1px solid var(--border);
+  border-left: 2px solid var(--amber);
+  background: rgba(200,147,60,0.04);
+}
+.pillar-title {
+  font-size: 0.82rem; font-weight: 600;
+  color: var(--bright); margin-bottom: 4px;
+  letter-spacing: 0.03em;
+}
+.pillar-body {
+  font-size: 0.76rem; line-height: 1.6;
+  color: var(--muted);
+}
+
+/* ── EXPERTISE ── */
+#expertise { background: var(--night); }
+.expertise-layout {
+  display: grid;
+  grid-template-columns: 1fr 2fr;
+  gap: 80px; margin-top: 72px;
+}
+.expertise-sidebar {}
+.expertise-sidebar p {
+  font-size: 0.92rem; line-height: 1.85;
+  color: var(--mid); font-weight: 300;
+  margin-top: 28px;
+}
+.expertise-list {
+  display: flex; flex-direction: column; gap: 1px;
+  margin-top: 48px;
+}
+.exp-item {
+  border-top: 1px solid var(--border);
+  padding: 24px 0;
+  display: grid; grid-template-columns: 1fr auto;
+  align-items: center;
+  cursor: default;
+  transition: padding 0.3s ease;
+}
+.exp-item:last-child { border-bottom: 1px solid var(--border); }
+.exp-item:hover { padding: 24px 16px; background: rgba(200,147,60,0.03); }
+.exp-name {
+  font-family: 'Cormorant Garamond', serif;
+  font-size: 1.3rem; font-weight: 600;
+  color: var(--bright); transition: color 0.3s;
+}
+.exp-item:hover .exp-name { color: var(--amber-soft); }
+.exp-tags-wrap {
+  display: flex; gap: 8px; flex-wrap: wrap; justify-content: flex-end;
+  max-width: 260px;
+}
+.exp-tag {
+  font-family: 'JetBrains Mono', monospace;
+  font-size: 0.62rem; padding: 3px 9px;
+  border: 1px solid var(--border);
+  color: var(--muted);
+  letter-spacing: 0.06em;
+}
+.exp-sub {
+  font-size: 0.78rem; color: var(--muted);
+  margin-top: 4px; font-weight: 300;
+}
+
+/* ── STACK IMAGE BANNER ── */
+.stack-banner {
+  position: relative; height: 320px; overflow: hidden;
+  margin: 0;
+}
+.stack-banner-bg {
+  position: absolute; inset: 0;
+  background-image:
+    linear-gradient(to right, var(--night) 0%, rgba(13,14,17,0.4) 40%, rgba(13,14,17,0.4) 60%, var(--night) 100%),
+    url('https://images.unsplash.com/photo-1518770660439-4636190af475?w=1920&q=80&auto=format&fit=crop');
+  background-size: cover; background-position: center;
+  filter: saturate(0.3) brightness(0.7);
+}
+.stack-banner-content {
+  position: relative; z-index: 2;
+  height: 100%;
+  display: flex; align-items: center; justify-content: center;
+  flex-direction: column; gap: 32px;
+  text-align: center;
+}
+.stack-banner-label {
+  font-family: 'JetBrains Mono', monospace;
+  font-size: 0.68rem; letter-spacing: 0.22em;
+  text-transform: uppercase; color: var(--amber);
+}
+.stack-tech-row {
+  display: flex; flex-wrap: wrap; gap: 12px 20px;
+  justify-content: center; max-width: 900px;
+}
+.stack-pill {
+  font-family: 'JetBrains Mono', monospace;
+  font-size: 0.8rem; letter-spacing: 0.08em;
+  color: var(--light);
+  padding: 8px 18px;
+  border: 1px solid rgba(200,147,60,0.25);
+  background: rgba(13,14,17,0.7);
+  backdrop-filter: blur(8px);
+  transition: all 0.3s;
+  cursor: default;
+}
+.stack-pill:hover {
+  border-color: var(--amber);
+  color: var(--amber-soft);
+  background: rgba(200,147,60,0.08);
+}
+
+/* ── EXPERIENCE ── */
+#experience { background: var(--deep); }
+.exp-timeline {
+  margin-top: 72px;
+  display: flex; flex-direction: column; gap: 0;
+}
+.timeline-entry {
+  display: grid;
+  grid-template-columns: 200px 1px 1fr;
+  gap: 0 40px;
+  padding: 48px 0;
+  border-bottom: 1px solid var(--border);
+  opacity: 0; transform: translateY(24px);
+  transition: all 0.7s ease;
+}
+.timeline-entry.vis { opacity: 1; transform: none; }
+.te-left {
+  padding-top: 6px;
+}
+.te-period {
+  font-family: 'JetBrains Mono', monospace;
+  font-size: 0.7rem; color: var(--amber);
+  letter-spacing: 0.08em; line-height: 1.8;
+}
+.te-company {
+  font-size: 0.85rem; color: var(--muted);
+  margin-top: 6px; font-weight: 400;
+}
+.te-divider {
+  width: 1px;
+  background: linear-gradient(to bottom, var(--amber) 0%, var(--border) 100%);
+  position: relative;
+}
+.te-divider::before {
+  content: '';
+  position: absolute; top: 8px; left: 50%;
+  transform: translateX(-50%);
+  width: 8px; height: 8px;
+  border-radius: 50%;
+  background: var(--amber);
+  box-shadow: 0 0 12px rgba(200,147,60,0.6);
+}
+.te-right { padding-left: 0; }
+.te-role {
+  font-family: 'Cormorant Garamond', serif;
+  font-size: 1.6rem; font-weight: 600;
+  color: var(--bright); line-height: 1.2;
+  margin-bottom: 16px;
+}
+.te-desc {
+  font-size: 0.9rem; line-height: 1.85;
+  color: var(--mid); font-weight: 300;
+  max-width: 680px;
+}
+.te-chips {
+  display: flex; flex-wrap: wrap; gap: 6px; margin-top: 20px;
+}
+.te-chip {
+  font-family: 'JetBrains Mono', monospace;
+  font-size: 0.62rem; padding: 4px 10px;
+  border: 1px solid var(--border);
+  color: var(--muted); letter-spacing: 0.06em;
+  transition: all 0.2s;
+}
+.te-chip:hover { border-color: var(--amber); color: var(--amber-soft); }
+
+/* ── PROJECTS ── */
+#projects { background: var(--night); }
+.projects-grid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 2px; margin-top: 72px;
+}
+.project-card {
+  position: relative; overflow: hidden;
+  background: var(--surface);
+  cursor: default;
+}
+.project-image {
+  width: 100%; height: 280px;
+  object-fit: cover; object-position: center;
+  display: block;
+  filter: grayscale(60%) brightness(0.55);
+  transition: all 0.6s ease;
+}
+.project-card:hover .project-image {
+  filter: grayscale(20%) brightness(0.75);
+  transform: scale(1.04);
+}
+.project-overlay {
+  position: absolute; inset: 0;
+  background: linear-gradient(to top, rgba(13,14,17,0.98) 35%, rgba(13,14,17,0.2) 100%);
+  display: flex; flex-direction: column; justify-content: flex-end;
+  padding: 36px 32px;
+}
+.project-num {
+  font-family: 'Cormorant Garamond', serif;
+  font-size: 4.5rem; font-weight: 700;
+  color: rgba(200,147,60,0.12);
+  line-height: 1;
+  position: absolute; top: 20px; right: 24px;
+  transition: color 0.4s;
+}
+.project-card:hover .project-num { color: rgba(200,147,60,0.25); }
+.project-category {
+  font-family: 'JetBrains Mono', monospace;
+  font-size: 0.62rem; letter-spacing: 0.18em;
+  text-transform: uppercase; color: var(--amber);
+  margin-bottom: 10px;
+}
+.project-title {
+  font-family: 'Cormorant Garamond', serif;
+  font-size: 1.5rem; font-weight: 600;
+  color: var(--bright); line-height: 1.2;
+  margin-bottom: 12px;
+}
+.project-blurb {
+  font-size: 0.84rem; line-height: 1.75;
+  color: var(--mid); font-weight: 300;
+  max-height: 0; overflow: hidden;
+  transition: max-height 0.5s ease;
+}
+.project-card:hover .project-blurb { max-height: 200px; }
+.project-stack {
+  display: flex; gap: 6px; flex-wrap: wrap; margin-top: 14px;
+}
+.ps {
+  font-family: 'JetBrains Mono', monospace;
+  font-size: 0.6rem; padding: 3px 8px;
+  border: 1px solid rgba(200,147,60,0.25);
+  color: var(--amber-soft); letter-spacing: 0.06em;
+}
+.project-result-badge {
+  margin-top: 16px;
+  padding: 10px 14px;
+  border-left: 2px solid var(--teal-soft);
+  background: rgba(45,125,116,0.08);
+  font-size: 0.8rem; line-height: 1.6;
+  color: var(--teal-soft);
+}
+
+/* ── REPOS ── */
+.repos-section {
+  margin-top: 60px;
+  padding-top: 60px;
+  border-top: 1px solid var(--border);
+}
+.repos-grid {
+  display: grid; grid-template-columns: repeat(3, 1fr);
+  gap: 1px; margin-top: 40px;
+  border: 1px solid var(--border);
+}
+.repo-item {
+  padding: 28px 24px;
+  background: var(--surface);
+  text-decoration: none;
+  display: flex; flex-direction: column; gap: 10px;
+  transition: background 0.3s;
+  border-right: 1px solid var(--border);
+}
+.repo-item:last-child { border-right: none; }
+.repo-item:hover { background: rgba(200,147,60,0.05); }
+.repo-item-lang {
+  font-family: 'JetBrains Mono', monospace;
+  font-size: 0.62rem; letter-spacing: 0.12em;
+  color: var(--amber); text-transform: uppercase;
+}
+.repo-item-name {
+  font-size: 0.88rem; font-weight: 500;
+  color: var(--bright); line-height: 1.4;
+}
+.repo-item-desc {
+  font-size: 0.78rem; color: var(--muted);
+  line-height: 1.55; font-weight: 300; flex: 1;
+}
+.repo-item-arrow {
+  font-size: 0.72rem; color: var(--amber);
+  transition: transform 0.3s;
+}
+.repo-item:hover .repo-item-arrow { transform: translateX(4px); }
+
+/* ── CONTACT ── */
+#contact { background: var(--deep); }
+.contact-grid {
+  display: grid; grid-template-columns: 1fr 1fr;
+  gap: 80px; align-items: start; margin-top: 72px;
+}
+.contact-left {}
+.contact-statement {
+  font-family: 'Cormorant Garamond', serif;
+  font-size: 1.8rem; font-weight: 300; line-height: 1.45;
+  color: var(--bright); margin-top: 28px; margin-bottom: 40px;
+}
+.contact-statement em { font-style: italic; color: var(--amber-soft); }
+.contact-direct { display: flex; flex-direction: column; gap: 0; }
+.contact-direct-item {
+  display: flex; align-items: center;
+  gap: 20px; padding: 22px 0;
+  border-bottom: 1px solid var(--border);
+  text-decoration: none;
+  color: var(--light);
+  transition: all 0.3s;
+}
+.contact-direct-item:hover { color: var(--amber-soft); padding-left: 8px; }
+.cdi-label {
+  font-family: 'JetBrains Mono', monospace;
+  font-size: 0.62rem; letter-spacing: 0.14em;
+  text-transform: uppercase; color: var(--muted);
+  min-width: 80px;
+}
+.cdi-value { font-size: 0.94rem; font-weight: 400; }
+
+/* Form */
+.form-block {
+  background: var(--surface);
+  padding: 48px;
+  border: 1px solid var(--border);
+}
+.form-block h3 {
+  font-family: 'Cormorant Garamond', serif;
+  font-size: 1.4rem; font-weight: 600;
+  color: var(--bright); margin-bottom: 32px;
+}
+.field { margin-bottom: 20px; }
+.field label {
+  display: block;
+  font-family: 'JetBrains Mono', monospace;
+  font-size: 0.62rem; letter-spacing: 0.14em;
+  text-transform: uppercase; color: var(--muted);
+  margin-bottom: 8px;
+}
+.field input,
+.field textarea,
+.field select {
+  width: 100%;
+  background: var(--night);
+  border: 1px solid var(--border);
+  padding: 14px 16px;
+  color: var(--bright);
+  font-family: 'Outfit', sans-serif;
+  font-size: 0.9rem; font-weight: 300;
+  outline: none; resize: none;
+  transition: border-color 0.3s;
+  appearance: none;
+}
+.field input:focus,
+.field textarea:focus,
+.field select:focus { border-color: var(--amber); }
+.field input::placeholder,
+.field textarea::placeholder { color: var(--muted); }
+.field textarea { min-height: 110px; }
+.field select option { background: var(--surface); }
+.field-row { display: grid; grid-template-columns: 1fr 1fr; gap: 16px; }
+.btn-submit {
+  width: 100%; margin-top: 8px;
+  padding: 16px 24px;
+  background: var(--amber);
+  border: none;
+  font-family: 'Outfit', sans-serif;
+  font-size: 0.82rem; font-weight: 600;
+  letter-spacing: 0.14em; text-transform: uppercase;
+  color: var(--night);
+  cursor: pointer;
+  transition: all 0.3s;
+  position: relative; overflow: hidden;
+}
+.btn-submit::before {
+  content: '';
+  position: absolute; inset: 0;
+  background: var(--amber-soft);
+  transform: translateX(-100%);
+  transition: transform 0.4s ease;
+}
+.btn-submit:hover::before { transform: translateX(0); }
+.btn-submit span { position: relative; z-index: 1; }
+.btn-submit:hover { box-shadow: 0 0 40px rgba(200,147,60,0.3); }
+.form-success-msg {
+  display: none;
+  text-align: center; padding: 48px 24px;
+}
+.form-success-msg h4 {
+  font-family: 'Cormorant Garamond', serif;
+  font-size: 1.6rem; color: var(--bright); margin-bottom: 12px;
+}
+.form-success-msg p { font-size: 0.88rem; color: var(--mid); line-height: 1.7; }
+.success-line {
+  width: 48px; height: 2px;
+  background: var(--amber);
+  margin: 0 auto 24px;
+}
+
+/* ── FOOTER ── */
+footer {
+  background: var(--night);
+  border-top: 1px solid var(--border);
+  padding: 48px 0;
+}
+.footer-grid {
+  display: flex; align-items: center; justify-content: space-between;
+}
+.footer-brand {
+  font-family: 'Cormorant Garamond', serif;
+  font-size: 1.1rem; font-weight: 600; color: var(--bright);
+}
+.footer-brand em { color: var(--amber); font-style: normal; }
+.footer-links {
+  display: flex; gap: 28px; list-style: none;
+}
+.footer-links a {
+  font-size: 0.75rem; letter-spacing: 0.1em; text-transform: uppercase;
+  color: var(--muted); text-decoration: none; transition: color 0.3s;
+}
+.footer-links a:hover { color: var(--amber); }
+.footer-copy {
+  font-family: 'JetBrains Mono', monospace;
+  font-size: 0.66rem; color: var(--muted); letter-spacing: 0.06em;
+}
+
+/* ── REVEAL ── */
+.r {
+  opacity: 0; transform: translateY(28px);
+  transition: opacity 0.8s ease, transform 0.8s ease;
+}
+.r.v { opacity: 1; transform: none; }
+.r-delay-1 { transition-delay: 0.1s; }
+.r-delay-2 { transition-delay: 0.2s; }
+.r-delay-3 { transition-delay: 0.3s; }
+
+/* ── RESPONSIVE ── */
+@media (max-width: 1024px) {
+  .wrap { padding: 0 32px; }
+  nav, nav.solid { padding: 18px 32px; }
+  .hero-content { padding: 0 32px 64px; }
+  .about-grid, .expertise-layout,
+  .contact-grid { grid-template-columns: 1fr; gap: 48px; }
+  .projects-grid { grid-template-columns: 1fr; }
+  .repos-grid { grid-template-columns: 1fr 1fr; }
+  .about-photo { aspect-ratio: 4/3; }
+  .expertise-layout { margin-top: 48px; }
+  .nav-menu { display: none; }
+}
+@media (max-width: 640px) {
+  section { padding: 80px 0; }
+  .repos-grid { grid-template-columns: 1fr; }
+  .field-row { grid-template-columns: 1fr; }
+  .form-block { padding: 28px 24px; }
+  .hero-row { flex-direction: column; align-items: flex-start; }
+  .timeline-entry { grid-template-columns: 1fr; }
+  .te-divider { display: none; }
+}
+</style>
+</head>
+<body>
+
+<div id="prog"></div>
+
+<!-- NAV -->
+<nav id="nav">
+  <div class="nav-id">Александр <em>Долецкий</em></div>
+  <ul class="nav-menu">
+    <li><a href="#about">Профиль</a></li>
+    <li><a href="#expertise">Экспертиза</a></li>
+    <li><a href="#experience">Опыт</a></li>
+    <li><a href="#projects">Проекты</a></li>
+    <li><a href="#contact">Контакт</a></li>
+  </ul>
+  <a href="mailto:doletsky.a@gmail.com" class="nav-cta">Написать</a>
+</nav>
+
+<!-- HERO -->
+<section class="hero" id="home">
+  <div class="hero-bg" id="heroBg"></div>
+  <div class="hero-content">
+    <p class="hero-eyebrow"><span></span>Python · PHP · FinTech · Remote</p>
+    <h1 class="hero-name">
+      <span style="font-weight:300">Александр</span>
+      <strong>Долецкий</strong>
+    </h1>
+    <div class="hero-row">
+      <p class="hero-desc">
+        <strong>Senior Backend Developer</strong> с 15 годами инженерной практики.
+        Проектирую распределённые финансовые системы — виртуальные карты, криптопроцессинг, внутренние балансы.
+        Там, где цена ошибки — деньги клиента, я выбираю <strong>надежность и безопасность.</strong>
+      </p>
+      <div class="hero-meta">
+        <div class="hero-meta-item">Опыт <strong>15+ лет</strong></div>
+        <div class="hero-meta-item">Формат <strong>Remote</strong></div>
+        <div class="hero-meta-item">Email <strong>doletsky.a@gmail.com</strong></div>
+      </div>
+    </div>
+  </div>
+  <div class="hero-scroll-hint">
+    <div class="scroll-line"></div>
+    Scroll
+  </div>
+</section>
+
+<!-- ABOUT -->
+<section id="about">
+  <div class="wrap">
+    <div class="section-tag r">Профиль</div>
+    <h2 class="section-h r">Инженер, которому<br><em>доверяют деньги</em></h2>
+    <div class="about-grid">
+      <div class="about-photo-wrap r">
+        <img
+          src="./images/DSC03935.jpg"
+          alt="Senior Backend Developer"
+          class="about-photo"
+          loading="lazy"
+        >
+        <div class="about-photo-frame"></div>
+        <div class="about-photo-label">Backend Developer · FinTech</div>
+      </div>
+      <div class="about-text r r-delay-1">
+        <p class="about-lead">
+          Я пишу код, за которым стоят <em>реальные транзакции,</em> реальные счета и реальные ожидания клиентов.
+        </p>
+        <p class="about-body">
+          15 лет в веб-разработке — от полного цикла (разработка, деплой, администрирование) до проектирования
+          <strong>распределённых FinTech-систем.</strong> Последние 3 года — Python (Django/DRF, FastAPI)
+          с фокусом на надёжность и безопасность финансовых операций.
+          <br><br>
+          Коммерческий опыт с <strong>PHP и Python</strong> — построение масштабируемых платёжных систем,
+          интеграции с провайдерами карт, блокчейн TRON TRC-20. Стиль работы: системный подход,
+          выбор архитектуры через trade-offs, прозрачная коммуникация.
+        </p>
+        <div class="about-pillars">
+          <div class="pillar">
+            <div class="pillar-title">Идемпотентность</div>
+            <div class="pillar-body">Финансовые операции должны быть повторяемы без побочных эффектов.</div>
+          </div>
+          <div class="pillar">
+            <div class="pillar-title">Аудит событий</div>
+            <div class="pillar-body">Полное логирование — не опция, а архитектурное требование.</div>
+          </div>
+          <div class="pillar">
+            <div class="pillar-title">Изоляция рисков</div>
+            <div class="pillar-body">Критичные компоненты изолируются — ключи, балансы, очереди.</div>
+          </div>
+          <div class="pillar">
+            <div class="pillar-title">Коммуникация</div>
+            <div class="pillar-body">Статусы, блокеры, риски — своевременно и без умолчаний.</div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- EXPERTISE -->
+<section id="expertise">
+  <div class="wrap">
+    <div class="section-tag r">Экспертиза</div>
+    <h2 class="section-h r">Стек и <em>глубина</em></h2>
+    <div class="expertise-layout">
+      <div class="expertise-sidebar r">
+        <p>
+          Каждый инструмент — под конкретную задачу,
+          выбранный через осознанный trade-off между скоростью, надёжностью и сложностью поддержки.
+        </p>
+      </div>
+      <div class="expertise-list r r-delay-1">
+        <div class="exp-item">
+          <div>
+            <div class="exp-name">Python Backend</div>
+            <div class="exp-sub">FastAPI · Django / DRF · async/await · Pydantic · REST API</div>
+          </div>
+          <div class="exp-tags-wrap">
+            <span class="exp-tag">3+ года</span>
+            <span class="exp-tag">FinTech</span>
+          </div>
+        </div>
+        <div class="exp-item">
+          <div>
+            <div class="exp-name">PHP</div>
+            <div class="exp-sub">Laravel · Bitrix · ORM · Queue · PHP 8+</div>
+          </div>
+          <div class="exp-tags-wrap">
+            <span class="exp-tag">15+ лет</span>
+            <span class="exp-tag">Production</span>
+          </div>
+        </div>
+        <div class="exp-item">
+          <div>
+            <div class="exp-name">FinTech Архитектура</div>
+            <div class="exp-sub">Виртуальные карты · TRON TRC-20 · Webhook · Дедупликация · JWT/RSA</div>
+          </div>
+          <div class="exp-tags-wrap">
+            <span class="exp-tag">Wallester</span>
+            <span class="exp-tag">Блокчейн</span>
+          </div>
+        </div>
+        <div class="exp-item">
+          <div>
+            <div class="exp-name">Инфраструктура</div>
+            <div class="exp-sub">Docker · Nginx · Linux · RabbitMQ · CI/CD</div>
+          </div>
+          <div class="exp-tags-wrap">
+            <span class="exp-tag">DevOps</span>
+          </div>
+        </div>
+        <div class="exp-item">
+          <div>
+            <div class="exp-name">Базы данных</div>
+            <div class="exp-sub">PostgreSQL · MySQL / MariaDB · SQLite · Проектирование схем</div>
+          </div>
+          <div class="exp-tags-wrap">
+            <span class="exp-tag">SQL</span>
+          </div>
+        </div>
+        <div class="exp-item">
+          <div>
+            <div class="exp-name">Frontend (вспомогательно)</div>
+            <div class="exp-sub">Vue 3 · Pinia · Vite · i18n · JavaScript ES6+ · jQuery</div>
+          </div>
+          <div class="exp-tags-wrap">
+            <span class="exp-tag">SPA</span>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- STACK BANNER -->
+<div class="stack-banner">
+  <div class="stack-banner-bg"></div>
+  <div class="stack-banner-content">
+    <div class="stack-banner-label">Не полный стек технологий</div>
+    <div class="stack-tech-row">
+      <span class="stack-pill">Python 3</span>
+      <span class="stack-pill">FastAPI</span>
+      <span class="stack-pill">Django / DRF</span>
+      <span class="stack-pill">PHP 8</span>
+      <span class="stack-pill">Laravel</span>
+      <span class="stack-pill">Bitrix</span>
+      <span class="stack-pill">PostgreSQL</span>
+      <span class="stack-pill">MySQL</span>
+      <span class="stack-pill">Docker</span>
+      <span class="stack-pill">RabbitMQ</span>
+      <span class="stack-pill">Nginx</span>
+      <span class="stack-pill">TRON TRC-20</span>
+      <span class="stack-pill">JWT · RSA</span>
+      <span class="stack-pill">Vue 3</span>
+      <span class="stack-pill">Linux</span>
+      <span class="stack-pill">REST · Webhook</span>
+    </div>
+  </div>
+</div>
+
+<!-- EXPERIENCE -->
+<section id="experience">
+  <div class="wrap">
+    <div class="section-tag r">Карьера</div>
+    <h2 class="section-h r">20 лет <em>в разработке</em></h2>
+    <div class="exp-timeline">
+
+      <div class="timeline-entry">
+        <div class="te-left">
+          <div class="te-period">05.2023 — 02.2026</div>
+          <div class="te-company">Traffic Heroes<br>FinTech · Remote</div>
+        </div>
+        <div class="te-divider"></div>
+        <div class="te-right">
+          <div class="te-role">Senior Back End Developer</div>
+          <p class="te-desc">
+            Ключевая роль в разработке финансовых сервисов: виртуальные карты Wallester,
+            внутренние балансы и счета, уведомления о транзакциях, криптопополнения TRON TRC-20.
+            Проектирование архитектуры с фокусом на отказоустойчивость — гарантированная доставка событий,
+            многослойная защита данных, полный аудит. Внедрение PHP/Laravel в существующую Bitrix-платформу,
+            параллельная разработка Python-сервисов (FastAPI, Django/DRF).
+          </p>
+          <div class="te-chips">
+            <span class="te-chip">Python</span><span class="te-chip">FastAPI</span>
+            <span class="te-chip">Django/DRF</span><span class="te-chip">PHP</span>
+            <span class="te-chip">Laravel</span><span class="te-chip">Bitrix</span>
+            <span class="te-chip">TRON TRC-20</span><span class="te-chip">Wallester API</span>
+            <span class="te-chip">RabbitMQ</span><span class="te-chip">Docker</span>
+            <span class="te-chip">JWT / RSA</span>
+          </div>
+        </div>
+      </div>
+
+      <div class="timeline-entry">
+        <div class="te-left">
+          <div class="te-period">02.2016 — 05.2023</div>
+          <div class="te-company">Контракты · Remote</div>
+        </div>
+        <div class="te-divider"></div>
+        <div class="te-right">
+          <div class="te-role">Back-end Developer</div>
+          <p class="te-desc">
+            Разработка и развитие веб-сервисов различной сложности и отраслей.
+            Интеграции со сторонними API, платёжными системами, внешними провайдерами.
+            Сопровождение серверной инфраструктуры, оптимизация производительности запросов и архитектуры.
+          </p>
+          <div class="te-chips">
+            <span class="te-chip">PHP</span><span class="te-chip">Python</span>
+            <span class="te-chip">REST API</span><span class="te-chip">MySQL</span>
+            <span class="te-chip">Linux</span><span class="te-chip">Nginx / Apache</span>
+          </div>
+        </div>
+      </div>
+
+      <div class="timeline-entry">
+        <div class="te-left">
+          <div class="te-period">04.2014 — 02.2016</div>
+          <div class="te-company">Indigos · Стартап</div>
+        </div>
+        <div class="te-divider"></div>
+        <div class="te-right">
+          <div class="te-role">Back-end Developer</div>
+          <p class="te-desc">
+            Работа в команде стартапа: backend-разработка, REST-интеграции, оптимизация.
+            Опыт работы в быстроменяющейся среде с высокой неопределённостью требований.
+          </p>
+          <div class="te-chips">
+            <span class="te-chip">PHP</span><span class="te-chip">REST</span>
+            <span class="te-chip">MySQL</span>
+          </div>
+        </div>
+      </div>
+
+      <div class="timeline-entry">
+        <div class="te-left">
+          <div class="te-period">10.2006 — 01.2014</div>
+          <div class="te-company">Фриланс · Контракты</div>
+        </div>
+        <div class="te-divider"></div>
+        <div class="te-right">
+          <div class="te-role">Backend Developer</div>
+          <p class="te-desc">
+            Полный цикл: от постановки задачи до production и сопровождения.
+            Веб-автоматизация, разработка сайтов и сервисов, деплой. Формирование базы компетенций
+            системного инженера с ответственностью за конечный результат.
+          </p>
+          <div class="te-chips">
+            <span class="te-chip">PHP</span><span class="te-chip">JavaScript</span>
+            <span class="te-chip">SQL</span><span class="te-chip">Linux</span>
+          </div>
+        </div>
+      </div>
+
+    </div>
+  </div>
+</section>
+
+<!-- PROJECTS -->
+<section id="projects">
+  <div class="wrap">
+    <div class="section-tag r">Ключевые кейсы</div>
+    <h2 class="section-h r">Проекты, которые<br><em>работают</em></h2>
+    <div class="projects-grid r">
+
+      <div class="project-card">
+        <img
+          src="https://images.unsplash.com/photo-1563013544-824ae1b704d3?w=900&q=80&auto=format&fit=crop"
+          alt="Wallester Virtual Cards Integration"
+          class="project-image" loading="lazy"
+        >
+        <div class="project-overlay">
+          <div class="project-num">01</div>
+          <div class="project-category">FinTech · Платёжная система</div>
+          <div class="project-title">Интеграция Wallester<br>Виртуальные банковские карты</div>
+          <div class="project-blurb">
+            Ведущий разработчик/архитектор интеграции. Прокси-слой с немедленным подтверждением
+            и асинхронной доставкой webhook-событий. Дедупликация, JWT + RSA, полное логирование,
+            очередь для консистентности параллельных операций.
+          </div>
+          <div class="project-result-badge">
+            Production-ready. Нулевые потери данных. Устойчивость к сбоям провайдера.
+          </div>
+          <div class="project-stack">
+            <span class="ps">PHP</span><span class="ps">Bitrix</span>
+            <span class="ps">JavaScript</span><span class="ps">JWT/RSA</span>
+            <span class="ps">Webhook</span><span class="ps">Nginx</span>
+          </div>
+        </div>
+      </div>
+
+      <div class="project-card">
+        <img
+          src="https://images.unsplash.com/photo-1639762681057-408e52192e55?w=900&q=80&auto=format&fit=crop"
+          alt="TRON TRC-20 Crypto Processing"
+          class="project-image" loading="lazy"
+        >
+        <div class="project-overlay">
+          <div class="project-num">02</div>
+          <div class="project-category">Blockchain · Криптопроцессинг</div>
+          <div class="project-title">TRON TRC-20<br>Криптопополнения</div>
+          <div class="project-blurb">
+            Архитектор + ключевой разработчик. Трёхкомпонентная схема: публичный слой,
+            оркестратор состояния, изолированный блокчейн-сервис. Pull-модель вместо push —
+            снижение риска потерь событий. Разделение пула адресов для горизонтального масштабирования.
+          </div>
+          <div class="project-result-badge">
+            Финтех-уровень изоляции ключей. Масштабирование без конфликтов.
+          </div>
+          <div class="project-stack">
+            <span class="ps">Python</span><span class="ps">FastAPI</span>
+            <span class="ps">Django/DRF</span><span class="ps">TRON</span>
+            <span class="ps">Docker</span><span class="ps">SQL</span>
+          </div>
+        </div>
+      </div>
+
+    </div>
+
+    <!-- Repos -->
+    <div class="repos-section r">
+      <div class="section-tag">Демо-репозитории на GitHub</div>
+      <div class="repos-grid">
+        <a href="https://github.com/doletsky/fintech_demo_expense_tracker_fastapi" target="_blank" class="repo-item">
+          <div class="repo-item-lang">FastAPI · Python</div>
+          <div class="repo-item-name">Expense Tracker FastAPI</div>
+          <div class="repo-item-desc">Трекер расходов с async-архитектурой и полным REST API</div>
+          <div class="repo-item-arrow">→ github.com</div>
+        </a>
+        <a href="https://github.com/doletsky/fintech_demo_vue_financial_dashboard" target="_blank" class="repo-item">
+          <div class="repo-item-lang">Vue 3 · Pinia</div>
+          <div class="repo-item-name">Vue Financial Dashboard</div>
+          <div class="repo-item-desc">SPA-дашборд финансовых данных с роутингом и i18n</div>
+          <div class="repo-item-arrow">→ github.com</div>
+        </a>
+        <a href="https://github.com/doletsky/fintech_demo_transaction_manager_django" target="_blank" class="repo-item">
+          <div class="repo-item-lang">Django · DRF</div>
+          <div class="repo-item-name">Transaction Manager</div>
+          <div class="repo-item-desc">Менеджер транзакций с аудитом и фоновыми задачами</div>
+          <div class="repo-item-arrow">→ github.com</div>
+        </a>
+        <a href="https://github.com/doletsky/fintech_demo_microservices_financial" target="_blank" class="repo-item">
+          <div class="repo-item-lang">Python · Docker</div>
+          <div class="repo-item-name">Microservices Financial</div>
+          <div class="repo-item-desc">Микросервисная платформа с изоляцией компонентов</div>
+          <div class="repo-item-arrow">→ github.com</div>
+        </a>
+        <a href="https://github.com/doletsky/fintech_demo_laravel_invoice_system" target="_blank" class="repo-item">
+          <div class="repo-item-lang">Laravel · PHP</div>
+          <div class="repo-item-name">Laravel Invoice System</div>
+          <div class="repo-item-desc">Система инвойсов с очередями и Eloquent ORM</div>
+          <div class="repo-item-arrow">→ github.com</div>
+        </a>
+        <a href="https://github.com/doletsky" target="_blank" class="repo-item" style="background:rgba(200,147,60,0.04);">
+          <div class="repo-item-lang">GitHub Profile</div>
+          <div class="repo-item-name">Все репозитории</div>
+          <div class="repo-item-desc">github.com/doletsky — открытые проекты и демо</div>
+          <div class="repo-item-arrow">→ Открыть профиль</div>
+        </a>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- CONTACT -->
+<section id="contact">
+  <div class="wrap">
+    <div class="section-tag r">Контакт</div>
+    <h2 class="section-h r">Есть <em>задача?</em></h2>
+    <div class="contact-grid">
+      <div class="contact-left r">
+        <p class="contact-statement">
+          Открыт к проектам и долгосрочному сотрудничеству.<br>
+          Работаю <em>удалённо,</em> часовой пояс — гибкий.
+        </p>
+        <div class="contact-direct">
+          <a href="mailto:doletsky.a@gmail.com" class="contact-direct-item">
+            <span class="cdi-label">Email</span>
+            <span class="cdi-value">doletsky.a@gmail.com</span>
+          </a>
+          <a href="https://t.me/adoletsky" target="_blank" class="contact-direct-item">
+            <span class="cdi-label">Telegram</span>
+            <span class="cdi-value">@adoletsky</span>
+          </a>
+          <a href="https://github.com/doletsky" target="_blank" class="contact-direct-item">
+            <span class="cdi-label">GitHub</span>
+            <span class="cdi-value">github.com/doletsky</span>
+          </a>
+          <div class="contact-direct-item" style="pointer-events:none;">
+            <span class="cdi-label">Формат</span>
+            <span class="cdi-value" style="color:var(--muted);">Remote · Full-time / Contract</span>
+          </div>
+        </div>
+      </div>
+
+      <div class="form-block r r-delay-1">
+        <h3>Написать напрямую</h3>
+        <form id="contactForm">
+          <div id="form-fields">
+            <div class="field-row">
+              <div class="field">
+                <label>Ваше имя</label>
+                <input type="text" id="fn" name="name" placeholder="Иван Петров">
+              </div>
+              <div class="field">
+                <label>Email / Telegram</label>
+                <input type="text" id="fc" name="contact" placeholder="@username">
+              </div>
+            </div>
+            <div class="field">
+              <label>Email (для подтверждения)</label>
+              <input type="email" id="femail" name="email" placeholder="your@email.com">
+            </div>
+            <div class="field">
+              <label>Тема</label>
+              <select id="ft" name="topic">
+                <option value="">Выберите тему...</option>
+                <option>FinTech / Платёжная система</option>
+                <option>Криптопроцессинг</option>
+                <option>API интеграция</option>
+                <option>Архитектурный консалтинг</option>
+                <option>Backend разработка (Python / Laravel)</option>
+                <option>Другое</option>
+              </select>
+            </div>
+            <div class="field">
+              <label>Опишите задачу</label>
+              <textarea id="fm" name="message" placeholder="Проект, стек, объём, сроки — чем больше деталей, тем точнее смогу ответить..."></textarea>
+            </div>
+
+            <!-- Formsubmit hidden fields -->
+            <input type="hidden" name="_subject" value="[Резюме] Контакт">
+            <input type="hidden" name="_captcha" value="false">
+            <input type="hidden" name="_autoresponse" value="Спасибо — ваше сообщение получено. Ниже — копия отправленного сообщения; я отвечу в течение двух рабочих дней.">
+
+            <button class="btn-submit" type="submit"><span>Отправить сообщение →</span></button>
+          </div>
+        </form>
+        <div class="form-success-msg" id="fsuccess">
+          <div class="success-line"></div>
+          <h4>Сообщение отправлено</h4>
+          <p>Спасибо. Отвечу в течение рабочего дня.<br>Также можно написать напрямую в Telegram: <strong style="color:var(--amber-soft)">@adoletsky</strong></p>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- FOOTER -->
+<footer>
+  <div class="wrap">
+    <div class="footer-grid">
+      <div class="footer-brand">Александр <em>Долецкий</em></div>
+      <ul class="footer-links">
+        <li><a href="#about">Профиль</a></li>
+        <li><a href="#expertise">Стек</a></li>
+        <li><a href="#experience">Опыт</a></li>
+        <li><a href="#contact">Контакт</a></li>
+      </ul>
+      <div class="footer-copy">Python · PHP · Laravel · FinTech · 2026</div>
+    </div>
+  </div>
+</footer>
+
+<script>
+// Progress
+window.addEventListener('scroll', () => {
+  const pct = window.scrollY / (document.body.scrollHeight - innerHeight) * 100;
+  document.getElementById('prog').style.width = pct + '%';
+  document.getElementById('nav').classList.toggle('solid', window.scrollY > 80);
+});
+
+// Hero bg parallax
+const heroBg = document.getElementById('heroBg');
+setTimeout(() => heroBg.classList.add('loaded'), 100);
+window.addEventListener('scroll', () => {
+  heroBg.style.transform = `scale(1) translateY(${window.scrollY * 0.2}px)`;
+});
+
+// Reveal on scroll
+const obs = new IntersectionObserver((entries) => {
+  entries.forEach(e => {
+    if (e.isIntersecting) { e.target.classList.add('v', 'vis'); obs.unobserve(e.target); }
+  });
+}, { threshold: 0.1 });
+document.querySelectorAll('.r, .timeline-entry').forEach(el => obs.observe(el));
+
+// Form
+// Formsubmit.co AJAX submission
+document.getElementById('contactForm').addEventListener('submit', async (e) => {
+  e.preventDefault();
+  const nameEl = document.getElementById('fn');
+  const contactEl = document.getElementById('fc');
+  const msgEl = document.getElementById('fm');
+  const topicEl = document.getElementById('ft');
+  const name = nameEl.value.trim();
+  const contact = contactEl.value.trim();
+  const msg = msgEl.value.trim();
+  if (!name || !contact || !msg) {
+    [nameEl, contactEl, msgEl].forEach(el => {
+      if (!el.value.trim()) {
+        el.style.borderColor = '#7a3535';
+        setTimeout(() => el.style.borderColor = '', 2000);
+      }
+    });
+    return;
+  }
+
+  const formData = new FormData(e.target);
+  // Add a small helper field combining contact info if desired
+  formData.set('contact', contact);
+  // If user provided an email, set it as reply-to so formsubmit sends autoresponse
+  const emailEl = document.getElementById('femail');
+  const email = emailEl && emailEl.value.trim();
+  if (email) {
+    formData.set('_replyto', email);
+    formData.set('email', email);
+  }
+
+  try {
+    const res = await fetch('https://formsubmit.co/ajax/doletsky.a@gmail.com', {
+      method: 'POST', body: formData, headers: { 'Accept': 'application/json' }
+    });
+    const json = await res.json();
+    if (res.ok) {
+      document.getElementById('form-fields').style.display = 'none';
+      document.getElementById('fsuccess').style.display = 'block';
+      e.target.reset();
+    } else {
+      alert(json.message || 'Ошибка отправки формы');
+    }
+  } catch (err) {
+    alert('Ошибка сети при отправке — попробуйте ещё раз.');
+  }
+});
+</script>
+</body>
+</html>
